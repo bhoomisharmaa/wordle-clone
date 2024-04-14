@@ -1,0 +1,96 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  /* colors */
+
+  --color-present: var(--yellow-3);
+  --color-correct: var(--green);
+  --color-absent: var(--color-tone-2);
+  --tile-text-color: var(--color-tone-7);
+  --key-text-color: var(--color-tone-1);
+  --key-evaluated-text-color: var(--color-tone-7);
+  --key-bg: var(--color-tone-4);
+  --key-bg-present: var(--color-present);
+  --key-bg-correct: var(--color-correct);
+  --key-bg-absent: var(--color-absent);
+  --key-evaluated-text-color: var(--color-tone-7);
+  --key-evaluated-text-color-absent: var(--white);
+  --modal-content-bg: var(--color-tone-7);
+  --outline-focus: var(--outlineBlue);
+  --color-correct-high-contrast: var(--wordle-high-contrast-green);
+
+  --color-tone-1: var(--black);
+  --color-tone-2: var(--gray-18);
+  --color-tone-3: var(--gray-19);
+  --color-tone-4: var(--gray-13);
+  --color-tone-5: var(--gray-20);
+  --color-tone-6: var(--gray-21);
+  --color-tone-7: var(--white);
+  --color-tone-8: var(--newsGray-100);
+  --color-tone-9: var(--newsGray-10);
+  --color-tone-10: var(--black);
+  --color-tone-11: var(--gray-18);
+  --color-tone-12: var(--newsGray-85);
+  --color-nav-hover: var(--gray-6);
+  --opacity-50: rgba(255, 255, 255, 0.5);
+  --error-background: var(--gray-22);
+  --icon-disabled: var(--gray-23);
+  --background-gray: var(--gray-29);
+  --inline-links: var(--linkBlue);
+  --warning-red: #d0021b;
+
+  --green: #6aaa64;
+  --green-4: #538d4e;
+  --beta-blue: #4f85e5;
+  --wordle-high-contrast-green: #58a351;
+  --spellingBeeYellow: #f7da21;
+  --miniCrosswordBlue: #95befa;
+  --connectionsPeriwinkle: #b4a8ff;
+  --sudoku-orange: #fb9b00;
+  --tiles-green: #b5e352;
+  --dailyCrosswordBlue: #6493e6;
+  --yellow-3: #c9b458;
+  --yellow-4: #b59f3b;
+  --newsGray-10: #dfdfdf;
+  --newsGray-100: #121212;
+  --newsGray-85: #363636;
+  --gray-3: #ccc;
+  --gray-4: #dcdcdc;
+  --gray-6: #f4f4f4;
+  --gray-13: #d3d6da;
+  --gray-18: #787c7e;
+  --gray-19: #878a8c;
+  --gray-20: #edeff1;
+  --gray-21: #f6f7f8;
+  --gray-22: #e3e3e1;
+  --gray-23: #a6a6a6;
+  --gray-24: #818384;
+  --gray-25: #565758;
+  --gray-26: #3a3a3c;
+  --gray-27: #424242;
+  --gray-28: #59595a;
+  --gray-29: #afafaf;
+  --black: #000;
+  --white: #fff;
+  --newsDarkContentPrimary: #f8f8f8;
+  --wordleBlack: #212121;
+  --wordleBlack-2: #272729;
+  --wordleBlack-3: #1a1a1b;
+  --wordleBlack-4: #121213;
+  --wordleBlack-5: #2f2f31;
+  --linkBlue: #346eb7;
+  --linkDarkBlue: #6ba1dd;
+  --orange: #f5793a;
+  --blue: #85c0f9;
+  --outlineBlue: #2671dc;
+  --svg-arrow-fill: var(--white);
+  --svg-arrow-stroke: var(--black);
+  --svg-arrow-fill-hover: var(--black);
+  --svg-arrow-stroke-hover: var(--white);
+}
+:root,
+.dark {
+  --color-background: var(--color-tone-7);
+}

@@ -1,0 +1,28 @@
+.row1,
+.row2,
+.row3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto 8px;
+  gap: 6px;
+  touch-action: manipulation;
+}
+
+.letter-button,
+.enter-button {
+  font-size: 1.25rem;
+  border-radius: 4px;
+  padding: 14px 15px;
+  color: var(--key-text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.enter-button {
+  background-color: var(--key-bg);
+  height: 58px;
+  font-size: 14px;
+}
