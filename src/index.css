@@ -89,8 +89,54 @@
   --svg-arrow-stroke: var(--black);
   --svg-arrow-fill-hover: var(--black);
   --svg-arrow-stroke-hover: var(--white);
+  --color-background: var(--color-tone-7);
+  --modal-content-bg: var(--color-tone-7);
+  --opacity-50: rgba(255, 255, 255, 0.5);
 }
+
 :root,
 .dark {
   --color-background: var(--color-tone-7);
+}
+
+.dark {
+  --color-tone-1: var(--newsDarkContentPrimary);
+  --color-tone-2: var(--gray-24);
+  --color-tone-3: var(--gray-25);
+  --color-tone-4: var(--gray-26);
+  --color-tone-5: var(--wordleBlack-2);
+  --color-tone-6: var(--wordleBlack-3);
+  --color-tone-7: var(--wordleBlack-4);
+  --color-tone-8: var(--newsDarkContentPrimary);
+  --color-tone-9: var(--gray-27);
+  --color-tone-10: var(--newsGray-10);
+  --color-tone-11: var(--newsGray-10);
+  --color-tone-12: var(--newsGray-10);
+  --color-nav-hover: var(--wordleBlack-5);
+  --opacity-50: rgba(0, 0, 0, 0.5);
+  --error-background: var(--color-tone-7);
+  --icon-disabled: var(--gray-28);
+  --svg-arrow-fill: var(--black);
+  --svg-arrow-stroke: var(--white);
+  --svg-arrow-fill-hover: var(--white);
+  --svg-arrow-stroke-hover: var(--black);
+  --inline-links: var(--linkDarkBlue);
+  --warning-red: #ea7980;
+  --key-bg: var(--color-tone-2);
+  --modal-content-bg: var(--color-tone-7);
+  --opacity-50: rgba(0, 0, 0, 0.5);
+}
+
+.colorblind {
+  --color-correct: var(--orange);
+  --color-present: var(--blue);
+  --color-absent: var(--color-tone-2);
+  --tile-text-color: var(--white);
+  --key-bg-present: var(--color-present);
+  --key-bg-correct: var(--color-correct);
+  --key-bg-absent: var(--color-tone-2);
+  --key-evaluated-text-color: var(--black);
+  --key-evaluated-text-color-absent: var(--white);
+  --color-correct-high-contrast: var(--orange);
+  --modal-content-bg: var(--color-tone-7);
 }

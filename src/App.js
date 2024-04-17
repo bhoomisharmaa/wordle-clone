@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Keyboard from "./Keyboard";
+import Keyboard from "./Keyboard/Keyboard";
+import Blocks from "./Blocks/block";
+import HowToPlay from "./Lil-Intro/howToPlay";
+import Settings from "./Settings/settings";
 
 let keyLetters = [];
 let keyColors = [];
@@ -19,7 +22,7 @@ function App() {
   ]);
   const [blockIndex, setBlockIndex] = useState(0);
   const [rowIndex, setRowIndex] = useState(0);
-  const [canEnter, setCanEnter] = useState(true);
+  const [canEnter, setCanEnter] = useState(false);
   // ['letter', ispresent]
   const [wordArray, setWordArray] = useState(
     word.split("").map((char) => [char.charAt(0), true])
@@ -35,9 +38,14 @@ function App() {
   ]);
   const [hasWon, setHasWon] = useState([false, 0]);
   const [letterIsPresentInKey, setLetterIsPresentInKey] = useState(false);
-  let letterChecked = 0;
+  const [canShowGuide, setCanShowGuide] = useState(true);
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [highContrastMode, setHighConstrastMode] = useState(false);
+  const [onScreenInput, setOnScreenInput] = useState(false);
 
   const checkAnswer = (letter, letterIndex) => {
+    // Checks the answer input by the user
     let newBgColor = [...animationName];
     let returnColor = "";
 
@@ -70,12 +78,14 @@ function App() {
   };
 
   const handleLetterClick = (letter) => {
+    // handle letter key input by the player(screen keyboard and the og one)
     if (canEnter && !hasWon[0]) {
       const newGuesses = [...guesses];
       newGuesses[rowIndex][blockIndex] = letter;
       setGuesses(newGuesses);
       setBlockIndex(blockIndex + 1);
 
+      // player can't enter if all the blocks in the row is filled
       if (blockIndex >= 4) {
         setCanEnter(false);
       }
@@ -83,7 +93,8 @@ function App() {
   };
 
   const handleBackSpaceClick = () => {
-    if (blockIndex > 0 && !hasWon[0]) {
+    // this little man hanldes backspace key input
+    if (blockIndex > 0 && !hasWon[0] && !isSettingsVisible && !canShowGuide) {
       const newGuesses = [...guesses];
       newGuesses[rowIndex][blockIndex - 1] = "";
       setGuesses(newGuesses);
@@ -93,13 +104,15 @@ function App() {
   };
 
   const handleEnterClick = () => {
-    if (blockIndex > 4 && !hasWon[0]) {
+    // bro handles enter key input
+    if (blockIndex > 4 && !hasWon[0] && !isSettingsVisible && !canShowGuide) {
       let newAnimate = [...canAnimate];
       newAnimate[rowIndex] = true;
       setCanAnimate(newAnimate);
       guesses[rowIndex].map((letter, index) => {
         checkAnswer(letter, index);
         if (index >= 4) {
+          // (array) checks if all the letters are correct an in correct order
           const isCorrect = wordArray.map((letter, index) => {
             return guesses[rowIndex][index] === letter[0];
           });
@@ -113,11 +126,34 @@ function App() {
   };
 
   return (
-    <>
+    <body
+      className={`${darkMode ? "dark" : ""} ${
+        highContrastMode ? "colorblind" : ""
+      }`}
+    >
       <header>
+        <div>--</div>
         <h1 className="">Wordle</h1>
+        <div className="flex gap-4">
+          <button
+            onClick={() => {
+              setCanShowGuide(true);
+              setCanEnter(false);
+            }}
+          >
+            ?
+          </button>
+          <button
+            onClick={() => {
+              setIsSettingsVisible(true);
+              setCanEnter(false);
+            }}
+          >
+            @
+          </button>
+        </div>
       </header>
-      <div className="main-screen">
+      <div className="main-screen relative">
         <div className="center-board">
           <Blocks
             hanldeOnClick={handleLetterClick}
@@ -133,6 +169,7 @@ function App() {
             animationName={animationName}
             setAnimationName={setAnimationName}
             hasWon={hasWon}
+            onScreenInput={onScreenInput}
           />
         </div>
         <div className="keyboard">
@@ -147,125 +184,27 @@ function App() {
             keysLetter={keyLetters}
           />
         </div>
+        {canShowGuide ? (
+          <HowToPlay
+            setCanShowGuide={setCanShowGuide}
+            setCanEnter={setCanEnter}
+          />
+        ) : null}
+        {isSettingsVisible ? (
+          <Settings
+            darkMode={darkMode}
+            setDarkMode={setDarkMode}
+            highContrastMode={highContrastMode}
+            setHighContrastMode={setHighConstrastMode}
+            onScreenInput={onScreenInput}
+            setOnScreenInput={setOnScreenInput}
+            setIsSettingsVisible={setIsSettingsVisible}
+            setCanEnter={setCanEnter}
+          />
+        ) : null}
       </div>
-    </>
+    </body>
   );
-}
-
-function Blocks({
-  hanldeOnClick,
-  handleBackSpaceClick,
-  handleEnterClick,
-  guesses,
-  rowIndex,
-  setBlockIndex,
-  setCanEnter,
-  wordArray,
-  canAnimate,
-  setCanAnimate,
-  animationName,
-  hasWon,
-}) {
-  let blocks = [];
-  let rows = [];
-
-  const [canCheckRow, setCanCheckRow] = useState(Array(6).fill(false));
-
-  const [isWord, setIsWord] = useState(false);
-  const [isAnimationFinished, setIsAnimationFinished] = useState([
-    Array(5).fill(false),
-    Array(5).fill(false),
-    Array(5).fill(false),
-    Array(5).fill(false),
-    Array(5).fill(false),
-    Array(5).fill(false),
-  ]);
-
-  async function checkIfWordisValid(searchWord) {
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${searchWord}`).then(
-      async (response) => {
-        const data = await response.json();
-        return Array.isArray(data);
-      }
-    );
-  }
-
-  useEffect(() => {
-    if (rowIndex <= 5) {
-      const handleKeyPress = (event) => {
-        const key = event.key.toUpperCase();
-        if (/[A-Z]/.test(key) && event.keyCode >= 65 && event.keyCode <= 90) {
-          hanldeOnClick(key);
-        } else if (key === "BACKSPACE") {
-          handleBackSpaceClick();
-        } else if (key === "ENTER") {
-          handleEnterClick();
-        }
-      };
-
-      document.addEventListener("keydown", handleKeyPress);
-      return () => {
-        document.removeEventListener("keydown", handleKeyPress);
-      };
-    }
-  }, [guesses, rowIndex, wordArray, canCheckRow]);
-
-  const animationDelay = ["0ms", "200ms", "400ms", "600ms", "800ms"];
-  const [winningClassName, setWinningClassName] = useState("");
-  const handleAnimationEnd = (i, j) => {
-    let newAnimation = [...isAnimationFinished];
-    newAnimation[i][j] = true;
-    setIsAnimationFinished(newAnimation);
-    if (j === 4) {
-      const newCheckArray = [...canCheckRow];
-      newCheckArray[rowIndex] = true;
-      setCanCheckRow(newCheckArray);
-      setBlockIndex(0);
-      setCanEnter(true);
-      if (hasWon[0]) {
-        setWinningClassName("winningRow");
-        let newAnimate = [...canAnimate];
-        newAnimate[rowIndex - 1] = false;
-        setCanAnimate(newAnimate);
-        // const newAnimation = [...animationName];
-        // newAnimation[i][j] = "winningJump";
-        // setAnimationName(newAnimation);
-      }
-    }
-  };
-
-  for (let i = 0; i <= 5; i++) {
-    for (let j = 0; j <= 4; j++) {
-      blocks.push(
-        <div
-          className={`block ${i === hasWon[1] ? winningClassName : ""}`}
-          key={j}
-          onAnimationEnd={() => handleAnimationEnd(i, j)}
-          style={{
-            border: `2px solid ${
-              guesses[i][j] ? "var(--color-tone-3)" : "var(--color-tone-4)"
-            }`,
-            color: winningClassName ? "var(--color-tone-7)" : "black",
-            animation: canAnimate[i]
-              ? `${animationName[i][j]} 1s ${animationDelay[j]} ease forwards`
-              : hasWon[0] && i === hasWon[1]
-              ? `winningJump 0.4s ${animationDelay[j]} ease forwards`
-              : "",
-          }}
-        >
-          {guesses[i][j]}
-        </div>
-      );
-    }
-    rows.push(
-      <div className="row" key={i}>
-        {blocks}
-      </div>
-    );
-    blocks = [];
-  }
-
-  return <>{rows}</>;
 }
 
 function checksIfLetterIsPresent(wordArray, letter, setWordArray, letterIndex) {
@@ -284,7 +223,6 @@ function checksIfLetterIsPresent(wordArray, letter, setWordArray, letterIndex) {
     let letterAageHaiKya = false;
     for (let j = letterIndex; j <= 4; j++) {
       if (wordArray[j][0] === letter) {
-        console.log(wordArray[j][0] + " " + letter + " " + letterIndex);
         letterAageHaiKya = true;
       }
     }

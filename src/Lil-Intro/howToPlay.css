@@ -1,0 +1,76 @@
+.opaque-background {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: var(--opacity-50);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.intro {
+  position: relative;
+  border-radius: 8px;
+  border: 1px solid var(--color-tone-6);
+  background-color: var(--modal-content-bg);
+  color: var(--color-tone-1);
+  box-shadow: 0 4px 23px 0 rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 520px;
+  max-height: 100%;
+  animation: intro-slide 0.2s ease-in forwards;
+  padding: 32px;
+}
+
+@keyframes intro-slide {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+ul {
+  font-size: 16px;
+  line-height: 20px;
+  list-style-type: disc;
+  font-weight: 500;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding-inline-start: 20px;
+}
+
+.block-example {
+  height: 32px;
+  width: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: 2px solid var(--color-tone-3);
+}
+
+.example-row {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  display: flex;
+  gap: 5px;
+}
+
+@keyframes flip-in {
+  0% {
+    transform: rotateX(180deg);
+  }
+}
+
+.close-button {
+  position: absolute;
+  left: 91%;
+  bottom: 90%;
+  font-size: 20px;
+}

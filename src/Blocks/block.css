@@ -1,0 +1,89 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 5px;
+}
+
+.block {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+}
+
+@keyframes flip-in-correct {
+  0% {
+    transform: rotateX(180deg);
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+  100% {
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+}
+
+@keyframes flip-in-present {
+  0% {
+    transform: rotateX(180deg);
+    background-color: var(--color-present);
+    border: 2px solid var(--color-present);
+    color: var(--color-tone-7);
+  }
+  100% {
+    background-color: var(--color-present);
+    border: 2px solid var(--color-present);
+    color: var(--color-tone-7);
+  }
+}
+
+@keyframes flip-in-absent {
+  0% {
+    transform: rotateX(180deg);
+    background-color: var(--color-absent);
+    border: 2px solid var(--color-absent);
+    color: var(--color-tone-7);
+  }
+  100% {
+    background-color: var(--color-absent);
+    border: 2px solid var(--color-absent);
+    color: var(--color-tone-7);
+  }
+}
+
+.winningRow {
+  background-color: var(--color-correct);
+  border: 2px solid var(--color-correct);
+  color: var(--color-tone-7);
+}
+
+@keyframes winningJump {
+  0% {
+    transform: translateY(-20px);
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+  50% {
+    transform: translateY(0);
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+  80% {
+    transform: translateY(-20px);
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+  100% {
+    background-color: var(--color-correct);
+    border: 2px solid var(--color-correct);
+    color: var(--color-tone-7);
+  }
+}
