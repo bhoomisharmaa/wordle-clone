@@ -60,7 +60,15 @@ function App() {
       keyColors.push("var(--color-correct)");
     }
 
-    if (checksIfLetterIsPresent(wordArray, letter, setWordArray, letterIndex)) {
+    if (
+      checksIfLetterIsPresent(
+        wordArray,
+        letter,
+        setWordArray,
+        letterIndex,
+        guesses[rowIndex]
+      )
+    ) {
       returnColor = "flip-in-present";
       if (!keyLetters.includes(letter)) {
         keyLetters.push(letter);
@@ -207,7 +215,13 @@ function App() {
   );
 }
 
-function checksIfLetterIsPresent(wordArray, letter, setWordArray, letterIndex) {
+function checksIfLetterIsPresent(
+  wordArray,
+  letter,
+  setWordArray,
+  letterIndex,
+  guesses
+) {
   let ispresent = false;
 
   for (let i = 0; i <= 4; i++) {
@@ -221,8 +235,8 @@ function checksIfLetterIsPresent(wordArray, letter, setWordArray, letterIndex) {
 
   if (ispresent) {
     let letterAageHaiKya = false;
-    for (let j = letterIndex; j <= 4; j++) {
-      if (wordArray[j][0] === letter) {
+    for (let j = letterIndex + 1; j <= 4; j++) {
+      if (guesses[j] === wordArray[j][0]) {
         letterAageHaiKya = true;
       }
     }
