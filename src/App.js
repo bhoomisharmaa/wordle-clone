@@ -141,22 +141,16 @@ function App() {
     guesses[rowIndex].map((letter) => {
       guessedWord += letter.toLowerCase();
     });
-    const isLetterValid = await checkIsLetterValid(guessedWord);
+    // const isLetterValid = await checkIsLetterValid(guessedWord);
     const winningRemark = [
-      "Genius",
-      "W",
+      "Slaying",
+      "W!",
       "Einstein Who?",
-      "Yass Gurl!",
-      "damn bro",
+      "Legend",
+      "Mad Props",
       "Phew",
     ];
-    if (
-      blockIndex > 4 &&
-      !hasWon[0] &&
-      !isSettingsVisible &&
-      !isGuideVisible &&
-      isLetterValid
-    ) {
+    if (blockIndex > 4 && !hasWon[0] && !isSettingsVisible && !isGuideVisible) {
       let newAnimate = [...canAnimate];
       newAnimate[rowIndex] = true;
       setCanAnimate(newAnimate);
@@ -173,6 +167,10 @@ function App() {
           setWordArray(word.split("").map((char) => [char.charAt(0), true]));
           if (!isCorrect.includes(false)) {
             setRemarkMessage(winningRemark[rowIndex]);
+          }
+
+          if (rowIndex >= 5 && isCorrect.includes(false)) {
+            setRemarkMessage(word);
           }
         }
       });
@@ -259,7 +257,7 @@ function App() {
             setIsSettingsVisible={setIsSettingsVisible}
           />
         ) : null}
-        {canAnimateRow || hasWon[0] ? (
+        {canAnimateRow || hasWon[0] || rowIndex > 5 ? (
           <div className="remark">{remarkMessage}</div>
         ) : (
           ""
