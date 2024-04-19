@@ -141,7 +141,7 @@ function App() {
     guesses[rowIndex].map((letter) => {
       guessedWord += letter.toLowerCase();
     });
-    const isLetterValid = await checkIsLetterValid(guessedWord);
+    const letterValid = await checkIsLetterValid(guessedWord);
     const winningRemark = [
       "Slaying",
       "W!",
@@ -155,7 +155,7 @@ function App() {
       !hasWon[0] &&
       !isSettingsVisible &&
       !isGuideVisible &&
-      isLetterValid
+      letterValid
     ) {
       let newAnimate = [...canAnimate];
       newAnimate[rowIndex] = true;
