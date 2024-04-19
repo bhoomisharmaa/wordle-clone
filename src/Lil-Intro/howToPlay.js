@@ -1,6 +1,6 @@
 import "./howToPlay.css";
 
-export default function HowToPlay({ setCanShowGuide, setCanEnter }) {
+export default function HowToPlay({ setCanShowGuide }) {
   return (
     <div className="opaque-background">
       <div className="intro">
@@ -8,7 +8,6 @@ export default function HowToPlay({ setCanShowGuide, setCanEnter }) {
           className="close-button"
           onClick={() => {
             setCanShowGuide(false);
-            setCanEnter(true);
           }}
         >
           X

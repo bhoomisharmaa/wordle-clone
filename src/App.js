@@ -1,12 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import Keyboard from "./Keyboard/Keyboard";
 import Blocks from "./Blocks/block";
 import HowToPlay from "./Lil-Intro/howToPlay";
 import Settings from "./Settings/settings";
 
-let keyLetters = [];
-let keyColors = [];
+let keyLetters = []; //stores letters entered in wordle guesses
+let keyColors = []; //stores colors of keys of virtual on screen keyboard
+
+async function checkIsLetterValid(word) {
+  try {
+    const { apiKey } = require("./config");
+    const response = await fetch(
+      `https://api.api-ninjas.com/v1/dictionary?word=${word}`,
+      {
+        headers: {
+          "X-Api-Key": apiKey,
+        },
+      }
+    );
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error: ${response.status} ${errorMessage}`);
+    }
+    const data = await response.json();
+    return data.valid;
+  } catch (error) {
+    console.error("Request failed:", error);
+  }
+}
 
 function App() {
   const word = "MOIST";
@@ -22,7 +44,7 @@ function App() {
   ]);
   const [blockIndex, setBlockIndex] = useState(0);
   const [rowIndex, setRowIndex] = useState(0);
-  const [canEnter, setCanEnter] = useState(false);
+  const [canEnter, setCanEnter] = useState(true);
   // ['letter', ispresent]
   const [wordArray, setWordArray] = useState(
     word.split("").map((char) => [char.charAt(0), true])
@@ -37,12 +59,13 @@ function App() {
     Array(5).fill(""),
   ]);
   const [hasWon, setHasWon] = useState([false, 0]);
-  const [letterIsPresentInKey, setLetterIsPresentInKey] = useState(false);
-  const [canShowGuide, setCanShowGuide] = useState(true);
+  const [isGuideVisible, setIsGuideVisible] = useState(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [highContrastMode, setHighConstrastMode] = useState(false);
   const [onScreenInput, setOnScreenInput] = useState(false);
+  const [canAnimateRow, setCanAnimateRow] = useState(false);
+  const [remarkMessage, setRemarkMessage] = useState("");
 
   const checkAnswer = (letter, letterIndex) => {
     // Checks the answer input by the user
@@ -87,11 +110,12 @@ function App() {
 
   const handleLetterClick = (letter) => {
     // handle letter key input by the player(screen keyboard and the og one)
-    if (canEnter && !hasWon[0]) {
+    if (canEnter && !hasWon[0] && !isGuideVisible && !isSettingsVisible) {
       const newGuesses = [...guesses];
       newGuesses[rowIndex][blockIndex] = letter;
       setGuesses(newGuesses);
       setBlockIndex(blockIndex + 1);
+      console.log(letter);
 
       // player can't enter if all the blocks in the row is filled
       if (blockIndex >= 4) {
@@ -102,7 +126,7 @@ function App() {
 
   const handleBackSpaceClick = () => {
     // this little man hanldes backspace key input
-    if (blockIndex > 0 && !hasWon[0] && !isSettingsVisible && !canShowGuide) {
+    if (blockIndex > 0 && !hasWon[0] && !isSettingsVisible && !isGuideVisible) {
       const newGuesses = [...guesses];
       newGuesses[rowIndex][blockIndex - 1] = "";
       setGuesses(newGuesses);
@@ -111,16 +135,35 @@ function App() {
     }
   };
 
-  const handleEnterClick = () => {
+  const handleEnterClick = async () => {
     // bro handles enter key input
-    if (blockIndex > 4 && !hasWon[0] && !isSettingsVisible && !canShowGuide) {
+    let guessedWord = "";
+    guesses[rowIndex].map((letter) => {
+      guessedWord += letter.toLowerCase();
+    });
+    const isLetterValid = await checkIsLetterValid(guessedWord);
+    const winningRemark = [
+      "Genius",
+      "W",
+      "Einstein Who?",
+      "Yass Gurl!",
+      "damn bro",
+      "Phew",
+    ];
+    if (
+      blockIndex > 4 &&
+      !hasWon[0] &&
+      !isSettingsVisible &&
+      !isGuideVisible &&
+      isLetterValid
+    ) {
       let newAnimate = [...canAnimate];
       newAnimate[rowIndex] = true;
       setCanAnimate(newAnimate);
       guesses[rowIndex].map((letter, index) => {
         checkAnswer(letter, index);
         if (index >= 4) {
-          // (array) checks if all the letters are correct an in correct order
+          // (bool array) checks if all the letters are correct an in correct order
           const isCorrect = wordArray.map((letter, index) => {
             return guesses[rowIndex][index] === letter[0];
           });
@@ -128,8 +171,18 @@ function App() {
           setHasWon([!isCorrect.includes(false), rowIndex]);
           setRowIndex(rowIndex + 1);
           setWordArray(word.split("").map((char) => [char.charAt(0), true]));
+          if (!isCorrect.includes(false)) {
+            setRemarkMessage(winningRemark[rowIndex]);
+          }
         }
       });
+    } else {
+      setCanAnimateRow(true);
+      if (blockIndex <= 4) {
+        setRemarkMessage("Not Enough Letters");
+      } else {
+        setRemarkMessage("Not in Word List");
+      }
     }
   };
 
@@ -145,8 +198,7 @@ function App() {
         <div className="flex gap-4">
           <button
             onClick={() => {
-              setCanShowGuide(true);
-              setCanEnter(false);
+              setIsGuideVisible(true);
             }}
           >
             ?
@@ -154,7 +206,6 @@ function App() {
           <button
             onClick={() => {
               setIsSettingsVisible(true);
-              setCanEnter(false);
             }}
           >
             @
@@ -178,6 +229,8 @@ function App() {
             setAnimationName={setAnimationName}
             hasWon={hasWon}
             onScreenInput={onScreenInput}
+            canAnimateRow={canAnimateRow}
+            setCanAnimateRow={setCanAnimateRow}
           />
         </div>
         <div className="keyboard">
@@ -192,11 +245,8 @@ function App() {
             keysLetter={keyLetters}
           />
         </div>
-        {canShowGuide ? (
-          <HowToPlay
-            setCanShowGuide={setCanShowGuide}
-            setCanEnter={setCanEnter}
-          />
+        {isGuideVisible ? (
+          <HowToPlay setCanShowGuide={setIsGuideVisible} />
         ) : null}
         {isSettingsVisible ? (
           <Settings
@@ -207,9 +257,13 @@ function App() {
             onScreenInput={onScreenInput}
             setOnScreenInput={setOnScreenInput}
             setIsSettingsVisible={setIsSettingsVisible}
-            setCanEnter={setCanEnter}
           />
         ) : null}
+        {canAnimateRow || hasWon[0] ? (
+          <div className="remark">{remarkMessage}</div>
+        ) : (
+          ""
+        )}
       </div>
     </body>
   );

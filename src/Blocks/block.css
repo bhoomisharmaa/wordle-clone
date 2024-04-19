@@ -87,3 +87,30 @@
     color: var(--color-tone-7);
   }
 }
+
+.row-animate {
+  animation: row-shake 0.3s 0.2s ease forwards;
+}
+
+@keyframes row-shake {
+  0% {
+    transform: translateX(5px);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}

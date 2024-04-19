@@ -61,3 +61,12 @@ div {
   align-items: center;
   justify-content: center;
 }
+
+.remark {
+  position: absolute;
+  padding: 8px 12px;
+  border-radius: 5px;
+  color: var(--color-tone-7);
+  background-color: var(--color-tone-1);
+  top: -2%;
+}

@@ -15,6 +15,8 @@ export default function Blocks({
   animationName,
   hasWon,
   onScreenInput,
+  canAnimateRow,
+  setCanAnimateRow,
 }) {
   let blocks = [];
   let rows = [];
@@ -30,15 +32,6 @@ export default function Blocks({
     Array(5).fill(false),
     Array(5).fill(false),
   ]);
-
-  async function checkIfWordisValid(searchWord) {
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${searchWord}`).then(
-      async (response) => {
-        const data = await response.json();
-        return Array.isArray(data);
-      }
-    );
-  }
 
   useEffect(() => {
     if (rowIndex <= 5) {
@@ -82,9 +75,6 @@ export default function Blocks({
         let newAnimate = [...canAnimate];
         newAnimate[rowIndex - 1] = false;
         setCanAnimate(newAnimate);
-        // const newAnimation = [...animationName];
-        // newAnimation[i][j] = "winningJump";
-        // setAnimationName(newAnimation);
       }
     }
   };
@@ -115,7 +105,13 @@ export default function Blocks({
       );
     }
     rows.push(
-      <div className="row" key={i}>
+      <div
+        className={`row ${
+          canAnimateRow && i === rowIndex ? "row-animate" : ""
+        }`}
+        key={i}
+        onAnimationEnd={() => setCanAnimateRow(false)}
+      >
         {blocks}
       </div>
     );

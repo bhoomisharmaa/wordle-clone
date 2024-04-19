@@ -8,7 +8,6 @@ export default function Settings({
   onScreenInput,
   setOnScreenInput,
   setIsSettingsVisible,
-  setCanEnter,
 }) {
   return (
     <div className="opaque-background">
@@ -17,7 +16,6 @@ export default function Settings({
           className="close-button-settings"
           onClick={() => {
             setIsSettingsVisible(false);
-            setCanEnter(true);
           }}
         >
           X
