@@ -4,18 +4,16 @@ import Keyboard from "./Keyboard/Keyboard";
 import Blocks from "./Blocks/block";
 import HowToPlay from "./Lil-Intro/howToPlay";
 import Settings from "./Settings/settings";
-
 let keyLetters = []; //stores letters entered in wordle guesses
 let keyColors = []; //stores colors of keys of virtual on screen keyboard
 
 async function checkIsLetterValid(word) {
   try {
-    const { apiKey } = require("./config");
     const response = await fetch(
       `https://api.api-ninjas.com/v1/dictionary?word=${word}`,
       {
         headers: {
-          "X-Api-Key": apiKey,
+          "X-Api-Key": process.env.REACT_APP_API_KEY,
         },
       }
     );
@@ -115,7 +113,6 @@ function App() {
       newGuesses[rowIndex][blockIndex] = letter;
       setGuesses(newGuesses);
       setBlockIndex(blockIndex + 1);
-      console.log(letter);
 
       // player can't enter if all the blocks in the row is filled
       if (blockIndex >= 4) {
