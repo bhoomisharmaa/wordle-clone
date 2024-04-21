@@ -188,10 +188,11 @@ function App() {
   };
 
   return (
-    <body
-      className={`${darkMode ? "dark" : ""} ${
+    <div
+      className={`h-screen main-body ${darkMode ? "dark" : ""} ${
         highContrastMode ? "colorblind" : ""
       }`}
+      style={{ backgroundColor: "var(--color-background)" }}
     >
       <header>
         <div>--</div>
@@ -266,7 +267,7 @@ function App() {
           ""
         )}
       </div>
-    </body>
+    </div>
   );
 }
 

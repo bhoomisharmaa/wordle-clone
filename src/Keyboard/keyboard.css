@@ -26,3 +26,22 @@
   height: 58px;
   font-size: 14px;
 }
+
+@media (max-width: 485px) {
+  .letter-button,
+  .enter-button {
+    font-size: 90%;
+    border-radius: 4px;
+    padding: 8% 5%;
+    color: var(--key-text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .enter-button {
+    background-color: var(--key-bg);
+    height: 49px;
+    font-size: 12px;
+  }
+}

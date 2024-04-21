@@ -1,9 +1,9 @@
-body {
+.main-body {
   height: 100dvh;
-  background-color: var(--color-background);
   font-family: "Archivo Narrow", sans-serif;
   color: var(--color-tone-1);
   font-weight: 900;
+  overflow: hidden;
 }
 
 header {
